@@ -1,5 +1,6 @@
-import { AppRouter } from "../routing/AppRouter";
+import { RouterProvider as RRProvider } from 'react-router-dom';
+import { router } from '../routing/AppRouter'; // ✅ import 'router', not 'AppRouter'
 
 export const RouterProvider = () => {
-  return <AppRouter />;
+  return <RRProvider router={router} />;
 };

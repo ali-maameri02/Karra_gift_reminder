@@ -1,44 +1,66 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ProtectedRoute } from "./ProtectedRoute";
+import { createBrowserRouter } from 'react-router-dom';
 
-export const AppRouter = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
+// 🔐 Auth (shared layer)
+import AuthPage from '@/pages/user/RegistrationPage/index'; // ✅ default export from index.tsx
 
-        {/* AUTHENTICATION */}
-        <Route path="/login" element={<div>Login Page</div>} />
+// 👑 Admin (pages layer)
+import DashboardPage from '@/pages/admin/DashboardPage/';
+// import UsersPage from '@/pages/admin/UsersPage';
+// import VendorsPage from '@/pages/admin/VendorsPage';
+// import OrdersPage from '@/pages/admin/OrdersPage';
+// import PlansPage from '@/pages/admin/PlansPage';
+// import ReportsPage from '@/pages/admin/ReportsPage';
 
-        {/* ADMIN DASHBOARD */}
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute role="admin">
-              <div>Admin Dashboard</div>
-            </ProtectedRoute>
-          }
-        />
+// 🎁 Vendor & 🚚 Delivery (add later)
+// import VendorDashboard from '@/pages/vendor/DashboardPage';
+// import DeliveryDashboard from '@/pages/delivery/DashboardPage';
 
-        {/* VENDOR DASHBOARD */}
-        <Route
-          path="/vendor/*"
-          element={
-            <ProtectedRoute role="vendor">
-              <div>Vendor Dashboard</div>
-            </ProtectedRoute>
-          }
-        />
+// 🧩 Layouts & Guards (app layer)
+// import { DashboardLayout } from '@/pages/admin/DashboardPage/ui/DashboardLayout';
+// import { ProtectedRoute } from './ProtectedRoute';
+import { RoutePath } from './routes';
+import { ProtectedRoute } from './ProtectedRoute';
+import { DashboardLayout } from '@/pages/admin/DashboardPage/ui/DashboardLayout';
 
-        {/* DELIVERY DASHBOARD */}
-        <Route
-          path="/delivery/*"
-          element={
-            <ProtectedRoute role="delivery">
-              <div>Delivery Dashboard</div>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+export const router = createBrowserRouter([
+  // 🔓 Public
+  { path: RoutePath.login, element: <AuthPage /> },
+  { path: RoutePath.register, element: <AuthPage /> }, // Same page, switches mode
+
+  // 👑 Admin (nested under DashboardLayout)
+  {
+    element: <ProtectedRoute allowedRoles={['admin']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, path: RoutePath.admin.dashboard, element: <DashboardPage /> },
+          // { path: routes.admin.users, element: <UsersPage /> },
+          // { path: routes.admin.vendors, element: <VendorsPage /> },
+          // { path: routes.admin.orders, element: <OrdersPage /> },
+          // { path: routes.admin.plans, element: <PlansPage /> },
+          // { path: routes.admin.reports, element: <ReportsPage /> },
+        ],
+      },
+    ],
+  },
+
+  // 🎁 Vendor routes (example)
+  // {
+  //   element: <ProtectedRoute allowedRoles={['vendor']} />,
+  //   children: [
+  //     { path: routes.vendor.dashboard, element: <VendorDashboard /> },
+  //   ],
+  // },
+
+  // 🚚 Delivery routes (example)
+  // {
+  //   element: <ProtectedRoute allowedRoles={['delivery']} />,
+  //   children: [
+  //     { path: routes.delivery.dashboard, element: <DeliveryDashboard /> },
+  //   ],
+  // },
+
+  // 🔁 Redirect root → login
+  { path: '/', element: <AuthPage /> },
+]);
