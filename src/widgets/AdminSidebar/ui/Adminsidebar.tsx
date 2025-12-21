@@ -21,13 +21,12 @@ export const AdminSidebar = () => {
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   return (
-    <div className="sticky top-0 my-5 h-screen">
+    <div className="sticky top-0 my-5 h-auto py-3">
       {/* 🌐 Responsive Sidebar */}
       <div
         className={`bg-[#3E236E] text-white flex flex-col transition-all duration-300 rounded-r-3xl ease-in-out ${
           isCollapsed ? 'w-16' : 'w-64'
         }`}
-        style={{ height: '100vh' }}
       >
         {/* Logo Toggle (Top) */}
         <div className="p-4 border-b border-white/10">
