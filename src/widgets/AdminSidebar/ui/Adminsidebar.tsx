@@ -21,7 +21,7 @@ export const AdminSidebar = () => {
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   return (
-    <div className="sticky top-0 my-5 h-auto py-3">
+    <div className="fixed top-0 my-5 h-full py-3">
       {/* 🌐 Responsive Sidebar */}
       <div
         className={`bg-[#3E236E] text-white flex flex-col transition-all duration-300 rounded-r-3xl ease-in-out ${

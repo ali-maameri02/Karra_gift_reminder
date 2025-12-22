@@ -13,6 +13,7 @@ export const RoutePath = {
     vendors: '/admin/vendors',
     plans: '/admin/plans',
     reports: '/admin/reports',
+    products: '/admin/products',
   },
 
   // Vendor

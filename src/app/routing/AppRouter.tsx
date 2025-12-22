@@ -21,6 +21,8 @@ import DashboardPage from '@/pages/admin/DashboardPage/';
 import { RoutePath } from './routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DashboardLayout } from '@/pages/admin/DashboardPage/ui/DashboardLayout';
+import { UsersPage } from '@/pages/admin/UsersPage';
+import { Products } from '@/pages/admin/ProductsPage/ProductListPage/Products';
 
 export const router = createBrowserRouter([
   // 🔓 Public
@@ -35,8 +37,8 @@ export const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           { index: true, path: RoutePath.admin.dashboard, element: <DashboardPage /> },
-          // { path: routes.admin.users, element: <UsersPage /> },
-          // { path: routes.admin.vendors, element: <VendorsPage /> },
+          { path: RoutePath.admin.users, element: <UsersPage /> },
+          { path: RoutePath.admin.products, element: <Products /> },
           // { path: routes.admin.orders, element: <OrdersPage /> },
           // { path: routes.admin.plans, element: <PlansPage /> },
           // { path: routes.admin.reports, element: <ReportsPage /> },
