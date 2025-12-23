@@ -14,6 +14,7 @@ export const RoutePath = {
     plans: '/admin/plans',
     reports: '/admin/reports',
     products: '/admin/products',
+    packs: '/admin/packs',
   },
 
   // Vendor

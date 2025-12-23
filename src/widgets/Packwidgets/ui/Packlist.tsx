@@ -11,6 +11,7 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
+  PackagePlus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,65 +31,81 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import {
-  AddProductDialog,
-  NewProductFormValues,
-} from '@/widgets/AddProductWidget';
+  AddPackDialog,
+  NewPackFormValues,
+} from '@/widgets/AddPackWidget';
 
-type ProductStatus = 'available' | 'out_of_stock';
+type PackStatus = 'active' | 'inactive';
 
-interface Product {
-  id: string;
-  sku: string;
+interface PackProduct {
+  productId: string;
   name: string;
-  price: number;
-  color?: string;
-  qty: number;
-  date: string;
-  time: string;
-  status: ProductStatus;
-  images: string[];
+  sku: string;
+  quantity: number;
+  unitPrice: number;
 }
 
-// For now keep this local; later you can load from API.
-const initialProducts: Product[] = [
+interface Pack {
+  id: string;
+  name: string;
+  code: string;
+  status: PackStatus;
+  packPrice: number;
+  products: PackProduct[];
+  createdAt: string;
+}
+
+// Mock packs
+const initialPacks: Pack[] = [
   {
-    id: '1',
-    sku: '021231',
-    name: 'Beigi Coffe (Navy)',
-    price: 20,
-    color: 'Navy',
-    qty: 234,
-    date: '04/17/23',
-    time: '8:25 PM',
-    status: 'available',
-    images: [
-      'https://images.pexels.com/photos/19090/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=80',
-      'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=80',
+    id: 'p1',
+    name: 'Valentine Couple Pack',
+    code: 'PACK-VAL-01',
+    status: 'active',
+    packPrice: 49.99,
+    products: [
+      {
+        productId: '1',
+        name: 'Beigi Coffe (Navy)',
+        sku: '021231',
+        quantity: 1,
+        unitPrice: 20,
+      },
+      {
+        productId: '2',
+        name: 'Story Honzo (Cream)',
+        sku: '021232',
+        quantity: 1,
+        unitPrice: 20,
+      },
     ],
+    createdAt: '04/20/23 8:25 PM',
   },
   {
-    id: '2',
-    sku: '021232',
-    name: 'Story Honzo (Cream)',
-    price: 20,
-    color: 'Cream',
-    qty: 234,
-    date: '04/17/23',
-    time: '8:25 PM',
-    status: 'out_of_stock',
-    images: [
-      'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=80',
+    id: 'p2',
+    name: 'Birthday Surprise Box',
+    code: 'PACK-BDAY-01',
+    status: 'inactive',
+    packPrice: 35.0,
+    products: [
+      {
+        productId: '3',
+        name: 'Gift Mug',
+        sku: '050001',
+        quantity: 1,
+        unitPrice: 10,
+      },
     ],
+    createdAt: '05/10/23 4:10 PM',
   },
 ];
 
 const PAGE_SIZE = 10;
 
-const ProductList = () => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+const PackList = () => {
+  const [packs, setPacks] = useState<Pack[]>(initialPacks);
   const [search, setSearch] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
@@ -96,12 +113,12 @@ const ProductList = () => {
 
   const filtered = useMemo(() => {
     const query = search.toLowerCase();
-    return products.filter(
+    return packs.filter(
       (p) =>
         p.name.toLowerCase().includes(query) ||
-        p.sku.toLowerCase().includes(query),
+        p.code.toLowerCase().includes(query),
     );
-  }, [search, products]);
+  }, [search, packs]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -136,49 +153,57 @@ const ProductList = () => {
     );
   };
 
-  const handleView = (product: Product) => {
-    console.log('View product', product.id);
+  const handleView = (pack: Pack) => {
+    console.log('View pack', pack.id);
   };
 
-  const handleEdit = (product: Product) => {
-    console.log('Edit product', product.id);
+  const handleEdit = (pack: Pack) => {
+    console.log('Edit pack', pack.id);
   };
 
-  const handleDelete = (product: Product) => {
-    console.log('Delete product', product.id);
+  const handleDelete = (pack: Pack) => {
+    console.log('Delete pack', pack.id);
   };
 
   const handleExport = () => {
-    console.log('Export products');
+    console.log('Export packs');
   };
 
   const handleFilterClick = () => {
     console.log('Open filters');
   };
 
-  const handleNewProductClick = () => {
+  const handleNewPackClick = () => {
     setIsAddOpen(true);
   };
 
-  const handleCreateProduct = async ( data: NewProductFormValues,
-    files: File[]) => {
-    // Map dialog data to Product entity (you can adapt this mapping to your DDD model)
+  const handleQuickAddProduct = (pack: Pack) => {
+    console.log('Quick add product to pack', pack.id);
+    // later: open small side dialog to attach existing products
+  };
+
+  const handleCreatePack = async (data: NewPackFormValues) => {
     const now = new Date();
-   
-    const newProduct: Product = {
+    const newPack: Pack = {
       id: crypto.randomUUID(),
-      sku: data.sku,
       name: data.name,
-      price: data.price,
-      color: data.color,
-      qty: data.qty,
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      code: data.code,
       status: data.status,
-      images: files.map((file) => URL.createObjectURL(file)), // temporary previews
+      packPrice: data.packPrice,
+      products: data.products.map((p) => ({
+        productId: p.productId,
+        name: p.name,
+        sku: p.sku,
+        quantity: p.quantity,
+        unitPrice: p.unitPrice,
+      })),
+      createdAt: `${now.toLocaleDateString()} ${now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      })}`,
     };
 
-    setProducts((prev) => [newProduct, ...prev]);
+    setPacks((prev) => [newPack, ...prev]);
     setPage(1);
   };
 
@@ -192,7 +217,7 @@ const ProductList = () => {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
               className="w-full rounded-full border-gray-200 bg-gray-50 pl-9 pr-3 text-sm focus:bg-white"
-              placeholder="Search SKU, product name..."
+              placeholder="Search pack name, code..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -226,9 +251,9 @@ const ProductList = () => {
             <Button
               size="sm"
               className="rounded-full bg-primary px-4 text-primary-foreground hover:bg-primary/90"
-              onClick={handleNewProductClick}
+              onClick={handleNewPackClick}
             >
-              New Product
+              New Pack
               <Plus className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -243,91 +268,76 @@ const ProductList = () => {
                   <Checkbox
                     checked={allOnPageSelected}
                     onCheckedChange={toggleSelectAll}
-                    aria-label="Select all products"
+                    aria-label="Select all packs"
                   />
                 </TableHead>
-                <TableHead className="min-w-[220px]">Product</TableHead>
-                <TableHead className="w-24 text-right">Price</TableHead>
-                <TableHead className="w-24 text-center">Color</TableHead>
-                <TableHead className="w-16 text-center">QTY</TableHead>
-                <TableHead className="w-40 text-left">Date</TableHead>
-                <TableHead className="w-32 text-center">Status</TableHead>
-                <TableHead className="w-32 text-center">Action</TableHead>
+                <TableHead className="min-w-[220px]">Pack</TableHead>
+                <TableHead className="w-32 text-center">
+                  Products
+                </TableHead>
+                <TableHead className="w-24 text-right">Pack price</TableHead>
+                <TableHead className="w-40 text-left">Created at</TableHead>
+                <TableHead className="w-28 text-center">Status</TableHead>
+                <TableHead className="w-40 text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginated.map((product) => (
+              {paginated.map((pack) => (
                 <TableRow
-                  key={product.id}
+                  key={pack.id}
                   className="border-b border-gray-50 hover:bg-gray-50/60"
                 >
                   <TableCell className="align-middle">
                     <Checkbox
-                      checked={selectedIds.includes(product.id)}
-                      onCheckedChange={() => toggleRow(product.id)}
-                      aria-label={`Select ${product.name}`}
+                      checked={selectedIds.includes(pack.id)}
+                      onCheckedChange={() => toggleRow(pack.id)}
+                      aria-label={`Select ${pack.name}`}
                     />
                   </TableCell>
 
-                  {/* Product */}
+                  {/* Pack */}
                   <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-10 w-10 rounded-lg">
-                        <AvatarImage
-                          src={product.images[0]}
-                          alt={product.name}
-                        />
-                        <AvatarFallback className="rounded-lg bg-gray-100 text-xs">
-                          IMG
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="text-xs font-medium text-primary hover:underline text-left"
-                          onClick={() => handleView(product)}
-                        >
-                          {product.sku}
-                        </button>
-                        <span className="text-sm text-gray-800">
-                          {product.name}
-                        </span>
-                      </div>
+                    <div className="flex flex-col">
+                      <button
+                        type="button"
+                        className="text-xs font-medium text-primary hover:underline text-left"
+                        onClick={() => handleView(pack)}
+                      >
+                        {pack.code}
+                      </button>
+                      <span className="text-sm text-gray-800">
+                        {pack.name}
+                      </span>
                     </div>
                   </TableCell>
 
-                  {/* Price */}
+                  {/* Products count */}
+                  <TableCell className="text-center text-sm text-gray-700">
+                    {pack.products.length}{' '}
+                    <span className="text-[11px] text-gray-400">
+                      items
+                    </span>
+                  </TableCell>
+
+                  {/* Pack price */}
                   <TableCell className="text-right text-sm text-gray-800">
-                    ${product.price.toFixed(2)}
+                    ${pack.packPrice.toFixed(2)}
                   </TableCell>
 
-                  {/* Color */}
-                  <TableCell className="text-center text-sm text-gray-700">
-                    {product.color ?? '-'}
-                  </TableCell>
-
-                  {/* QTY */}
-                  <TableCell className="text-center text-sm text-gray-700">
-                    {product.qty}
-                  </TableCell>
-
-                  {/* Date */}
+                  {/* Created at */}
                   <TableCell className="text-sm text-gray-700">
-                    <div>{product.date}</div>
-                    <div className="text-xs text-gray-500">
-                      {product.time}
-                    </div>
+                    {pack.createdAt}
                   </TableCell>
 
                   {/* Status */}
                   <TableCell className="text-center">
-                    {product.status === 'available' ? (
+                    {pack.status === 'active' ? (
                       <Badge className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-200">
-                        Available
+                        Active
                       </Badge>
                     ) : (
-                      <Badge className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-200">
-                        Out of Stock
+                      <Badge className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-300">
+                        Inactive
                       </Badge>
                     )}
                   </TableCell>
@@ -338,7 +348,15 @@ const ProductList = () => {
                       <button
                         type="button"
                         className="rounded-full p-1 hover:bg-gray-100"
-                        onClick={() => handleView(product)}
+                        onClick={() => handleQuickAddProduct(pack)}
+                        aria-label="Add product to pack"
+                      >
+                        <PackagePlus className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-full p-1 hover:bg-gray-100"
+                        onClick={() => handleView(pack)}
                         aria-label="View"
                       >
                         <Eye className="h-4 w-4" />
@@ -346,7 +364,7 @@ const ProductList = () => {
                       <button
                         type="button"
                         className="rounded-full p-1 hover:bg-gray-100"
-                        onClick={() => handleEdit(product)}
+                        onClick={() => handleEdit(pack)}
                         aria-label="Edit"
                       >
                         <Pencil className="h-4 w-4" />
@@ -364,9 +382,9 @@ const ProductList = () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             className="text-red-600"
-                            onClick={() => handleDelete(product)}
+                            onClick={() => handleDelete(pack)}
                           >
-                            Delete product
+                            Delete pack
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -378,10 +396,10 @@ const ProductList = () => {
               {paginated.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={8}
+                    colSpan={7}
                     className="py-10 text-center text-sm text-gray-500"
                   >
-                    No products found for this search.
+                    No packs found for this search.
                   </TableCell>
                 </TableRow>
               )}
@@ -396,10 +414,10 @@ const ProductList = () => {
               <>
                 {1 + (currentPage - 1) * PAGE_SIZE} –{' '}
                 {Math.min(currentPage * PAGE_SIZE, filtered.length)} of{' '}
-                {filtered.length} products
+                {filtered.length} packs
               </>
             ) : (
-              '0 products'
+              '0 packs'
             )}
           </div>
 
@@ -443,14 +461,14 @@ const ProductList = () => {
         </div>
       </Card>
 
-      {/* Add product dialog */}
-      <AddProductDialog
+      {/* Add pack dialog */}
+      <AddPackDialog
         open={isAddOpen}
         onOpenChange={setIsAddOpen}
-        onSubmitProduct={handleCreateProduct}
+        onSubmitPack={handleCreatePack}
       />
     </>
   );
 };
 
-export default ProductList;
+export default PackList;

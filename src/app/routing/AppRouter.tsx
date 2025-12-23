@@ -22,7 +22,8 @@ import { RoutePath } from './routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DashboardLayout } from '@/pages/admin/DashboardPage/ui/DashboardLayout';
 import { UsersPage } from '@/pages/admin/UsersPage';
-import { Products } from '@/pages/admin/ProductsPage/ProductListPage/Products';
+import { Products } from '@/pages/ProductListPage/Products';
+import { Pack } from '@/pages/Packpage/Pack';
 
 export const router = createBrowserRouter([
   // 🔓 Public
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
           { index: true, path: RoutePath.admin.dashboard, element: <DashboardPage /> },
           { path: RoutePath.admin.users, element: <UsersPage /> },
           { path: RoutePath.admin.products, element: <Products /> },
+          { path: RoutePath.admin.packs, element: <Pack /> },
           // { path: routes.admin.orders, element: <OrdersPage /> },
           // { path: routes.admin.plans, element: <PlansPage /> },
           // { path: routes.admin.reports, element: <ReportsPage /> },
