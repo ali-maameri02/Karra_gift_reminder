@@ -82,4 +82,13 @@ export const ENDPOINTS = {
     byId: (paymentId: string) =>
       `/api/payments/${paymentId}`,
   },
+   products: {
+    base: "/api/products",
+
+    byId: (productId: string) =>
+      `/api/products/${productId}`,
+
+    stock: (productId: string) =>
+      `/api/products/${productId}/stock`,
+  },
 } as const;
