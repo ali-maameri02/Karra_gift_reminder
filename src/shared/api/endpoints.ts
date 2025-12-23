@@ -57,4 +57,8 @@ export const ENDPOINTS = {
     tracking: (deliveryId: string) =>
       `/api/deliveries/${deliveryId}/tracking`,
   },
+  notifications: {
+    base: "/api/notifications",
+  },
+
 } as const;
