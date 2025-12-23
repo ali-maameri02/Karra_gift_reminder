@@ -22,14 +22,17 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { Link } from 'react-router-dom';
 
-// Mock user
 const mockUser = {
   name: 'Natashia Bunny',
   email: 'natasiabunny@mail.com',
   avatar: 'https://i.pravatar.cc/150?img=67',
 };
 
-export const Header = () => {
+interface HeaderProps {
+  collapsed: boolean;
+}
+
+export const Header: React.FC<HeaderProps> = ({ collapsed }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -48,51 +51,52 @@ export const Header = () => {
 
   return (
     <header
-      className="
-        fixed top-0 rounded-xl  left-0 right-0 z-50 bg-[#3E236E] text-white shadow-sm
-        md:left-64 md:w-[calc(100%-16rem)]
-      "
+      className={`
+        fixed top-0 z-50 rounded-xl bg-[#3E236E] text-white shadow-sm
+        left-0 right-0 w-full
+        md:transition-all md:duration-300
+        ${collapsed ? 'md:left-24 md:w-[calc(95%-4rem)]' : 'md:left-72 md:w-[calc(95%-15rem)]'}
+      `}
     >
-      <div className="h-16 flex items-center px-4 md:px-6">
-        <div className="flex items-center justify-between w-full gap-3">
+      <div className="flex h-16 items-center px-4 md:px-6">
+        <div className="flex w-full items-center justify-between gap-3">
           {/* Left: Breadcrumbs */}
-          <div className="flex items-center gap-2 md:gap-4 min-w-0">
-            <h1 className="text-base md:text-lg font-bold truncate">
+          <div className="flex min-w-0 items-center gap-2 md:gap-4">
+            <h1 className="truncate text-base font-bold md:text-lg">
               Configurations
             </h1>
 
-            <div className="hidden md:flex items-center gap-1 text-sm text-white/70 min-w-0">
+            <div className="hidden min-w-0 items-center gap-1 text-sm text-white/70 md:flex">
               <span>▶</span>
               <Link
                 to="/admin"
-                className="hover:underline truncate max-w-[120px]"
+                className="max-w-[120px] truncate hover:underline"
               >
                 Main Page
               </Link>
               <span>▶</span>
-              <span className="font-medium truncate max-w-[120px]">
+              <span className="max-w-[120px] truncate font-medium">
                 Sub Page
               </span>
             </div>
 
-            <div className="md:hidden text-xs text-white/70 flex-shrink-0">
+            <div className="flex-shrink-0 text-xs text-white/70 md:hidden">
               <span>Main ▶ Sub</span>
             </div>
           </div>
 
           {/* Center: Search */}
-          <div className="flex-1 flex justify-center px-1">
+          <div className="flex flex-1 justify-center px-1">
             <div
               className={[
-                'relative transition-all duration-300',
-                'w-full max-w-md',
+                'relative w-full max-w-md transition-all duration-300',
                 !isSearchExpanded ? 'max-sm:max-w-[44px]' : '',
               ].join(' ')}
             >
               <div className="relative">
                 <Search
                   className={[
-                    'absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70',
+                    'pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70',
                     !isSearchExpanded ? 'max-sm:hidden' : '',
                   ].join(' ')}
                   aria-hidden="true"
@@ -106,10 +110,9 @@ export const Header = () => {
                     if (!e.currentTarget.value) setIsSearchExpanded(false);
                   }}
                   className={[
-                    'w-full py-2 rounded-lg bg-white/10 text-white placeholder-white/70 focus:outline-none transition-all',
-                    'pl-10 pr-10',
+                    'w-full rounded-lg bg-white/10 py-2 pl-10 pr-10 text-white placeholder-white/70 focus:outline-none transition-all',
                     !isSearchExpanded
-                      ? 'max-sm:w-[44px] max-sm:pl-3 max-sm:pr-3 max-sm:placeholder-transparent max-sm:text-transparent max-sm:border-transparent'
+                      ? 'max-sm:w-[44px] max-sm:pl-3 max-sm:pr-3 max-sm:text-transparent max-sm:placeholder-transparent max-sm:border-transparent'
                       : '',
                   ].join(' ')}
                 />
@@ -119,7 +122,7 @@ export const Header = () => {
                     size="icon"
                     type="button"
                     onClick={() => setIsSearchExpanded(true)}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 text-white hover:bg-white/10 sm:hidden"
+                    className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 text-white hover:bg-white/10 sm:hidden"
                     aria-label="Expand search"
                   >
                     <Search className="h-4 w-4" />
@@ -130,7 +133,7 @@ export const Header = () => {
           </div>
 
           {/* Right: Controls */}
-          <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
+          <div className="flex flex-shrink-0 items-center gap-1 md:gap-3">
             <Button
               variant="ghost"
               size="icon"
@@ -139,18 +142,22 @@ export const Header = () => {
               className="text-white hover:bg-white/10"
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {isDarkMode ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
             </Button>
 
             <Button
               variant="ghost"
               size="icon"
               type="button"
-              className="text-white hover:bg-white/10 relative"
+              className="relative text-white hover:bg-white/10"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="absolute -right-1 -top-1 h-2 w-2 animate-pulse rounded-full bg-red-500" />
             </Button>
 
             <DropdownMenu>
@@ -158,7 +165,7 @@ export const Header = () => {
                 <Button
                   variant="ghost"
                   type="button"
-                  className="flex items-center gap-2 text-white hover:bg-white/10 px-1"
+                  className="flex items-center gap-2 px-1 text-white hover:bg-white/10"
                   aria-label="User menu"
                 >
                   <img
@@ -166,26 +173,32 @@ export const Header = () => {
                     alt={mockUser.name}
                     className="h-8 w-8 rounded-full border-2 border-white/30"
                   />
-                  <div className="hidden md:flex flex-col items-start text-left max-w-[140px]">
-                    <span className="text-sm font-medium truncate">
+                  <div className="hidden max-w-[140px] flex-col items-start text-left md:flex">
+                    <span className="truncate text-sm font-medium">
                       {mockUser.name}
                     </span>
-                    <span className="text-xs text-white/70 truncate">
+                    <span className="truncate text-xs text-white/70">
                       {mockUser.email}
                     </span>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-white/70 hidden md:block" />
+                  <ChevronDown className="hidden h-4 w-4 text-white/70 md:block" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 p-2 bg-white">
+              <DropdownMenuContent align="end" className="w-56 bg-white p-2">
                 <DropdownMenuItem asChild>
-                  <Link to="/admin/settings" className="flex items-center gap-2">
+                  <Link
+                    to="/admin/settings"
+                    className="flex items-center gap-2"
+                  >
                     <Settings className="h-4 w-4" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/admin/support" className="flex items-center gap-2">
+                  <Link
+                    to="/admin/support"
+                    className="flex items-center gap-2"
+                  >
                     <HelpCircle className="h-4 w-4" />
                     Support
                   </Link>
@@ -205,4 +218,3 @@ export const Header = () => {
     </header>
   );
 };
-

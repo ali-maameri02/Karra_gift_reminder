@@ -13,3 +13,32 @@
     --border: 228 224 234; /* subtle gray */
   }
 }
+
+/* Modern, subtle sidebar scrollbar */
+.sidebar-scroll {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(250, 250, 250, 0.4) transparent;
+}
+
+/* Chrome / Edge / Safari */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;                 /* very thin */
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;              /* floating effect (no thumb touching edges) */
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(245, 245, 245, 0.45); /* yellow with transparency */
+  border-radius: 9999px;
+  box-shadow: 0 0 0 4px transparent;          /* space around thumb */
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.9);  /* stronger on hover */
+  box-shadow: 0 0 0 4px rgba(250, 250, 250, 0.08);
+}

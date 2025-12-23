@@ -45,13 +45,13 @@ const quickActions = [
     href: '/admin/payments',
     color: 'from-accent-purple to-accent-red',
   },
-  {
-    icon: Users,
-    title: 'Partner Management',
-    description: 'Approve partner requests',
-    href: '/admin/partners',
-    color: 'from-primary to-accent-purple',
-  },
+  // {
+  //   icon: Users,
+  //   title: 'Partner Management',
+  //   description: 'Approve partner requests',
+  //   href: '/admin/partners',
+  //   color: 'from-primary to-accent-purple',
+  // },
   {
     icon: Bell,
     title: 'Notification Center',

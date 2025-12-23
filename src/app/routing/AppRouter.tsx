@@ -22,8 +22,10 @@ import { RoutePath } from './routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DashboardLayout } from '@/pages/admin/DashboardPage/ui/DashboardLayout';
 import { UsersPage } from '@/pages/admin/UsersPage';
-import { Products } from '@/pages/ProductListPage/Products';
+import { Products } from '@/pages/ProductsPage/Products';
 import { Pack } from '@/pages/Packpage/Pack';
+import { Orders } from '@/pages/OrdersPage/Orders';
+import SubscriptionsPage from '@/pages/admin/SubscriptionPage/Subscriptions';
 
 export const router = createBrowserRouter([
   // 🔓 Public
@@ -41,7 +43,8 @@ export const router = createBrowserRouter([
           { path: RoutePath.admin.users, element: <UsersPage /> },
           { path: RoutePath.admin.products, element: <Products /> },
           { path: RoutePath.admin.packs, element: <Pack /> },
-          // { path: routes.admin.orders, element: <OrdersPage /> },
+          { path: RoutePath.admin.orders, element: <Orders /> },
+          { path: RoutePath.admin.subscriptions, element: <SubscriptionsPage /> },
           // { path: routes.admin.plans, element: <PlansPage /> },
           // { path: routes.admin.reports, element: <ReportsPage /> },
         ],
