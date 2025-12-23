@@ -77,4 +77,9 @@ export const ENDPOINTS = {
     byId: (packId: string) =>
       `/api/packs/${packId}`,
   },
+    payments: {
+    base: "/api/payments",
+    byId: (paymentId: string) =>
+      `/api/payments/${paymentId}`,
+  },
 } as const;
