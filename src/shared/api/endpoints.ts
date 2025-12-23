@@ -71,4 +71,10 @@ export const ENDPOINTS = {
     track: (orderId: string) =>
       `/api/orders/track/${orderId}`,
   },
+   packs: {
+    base: "/api/packs",
+
+    byId: (packId: string) =>
+      `/api/packs/${packId}`,
+  },
 } as const;
