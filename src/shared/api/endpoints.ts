@@ -32,4 +32,21 @@ export const ENDPOINTS = {
     sessions: (userId: string) =>
       `/api/users/${userId}/sessions`,
   },
+   clients: {
+    base: "/api/clients",
+
+    getById: (clientId: string) =>
+      `/api/clients/${clientId}`,
+
+    recipients: {
+      base: (clientId: string) =>
+        `/api/clients/${clientId}/recipients`,
+
+      // confirmUpcomingGift: (
+      //   clientId: string,
+      //   recipientId: string          // hadi ta3na wela khatina el 3omdaaaaan
+      // ) =>
+      //   `/api/clients/${clientId}/recipients/${recipientId}/confirm-upcoming-gift`,
+    },
+  },
 } as const;
