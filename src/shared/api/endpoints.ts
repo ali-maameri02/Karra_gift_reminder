@@ -104,4 +104,23 @@ export const ENDPOINTS = {
     byUser: (userId: string) =>
       `/api/subscriptions/user/${userId}`,
   },
+  vendors: {
+    base: "/api/vendors",
+
+    byId: (vendorId: string) =>
+      `/api/vendors/${vendorId}`,
+
+    orders: (vendorId: string) =>
+      `/api/vendors/${vendorId}/orders`,
+
+    updateOrderStatus: (
+      vendorId: string,
+      orderId: string
+    ) =>
+      `/api/vendors/${vendorId}/orders/${orderId}/status`,
+  },
+
+  admin: {
+    manageVendor: "/api/admin/vendors/manage",
+  },
 } as const;
