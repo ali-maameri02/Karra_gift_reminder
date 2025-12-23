@@ -60,5 +60,15 @@ export const ENDPOINTS = {
   notifications: {
     base: "/api/notifications",
   },
+  orders: {
+    base: "/api/orders",
+    place: "/api/orders/place",
+    status: "/api/orders/status",
 
+    byId: (orderId: string) =>
+      `/api/orders/${orderId}`,
+
+    track: (orderId: string) =>
+      `/api/orders/track/${orderId}`,
+  },
 } as const;
