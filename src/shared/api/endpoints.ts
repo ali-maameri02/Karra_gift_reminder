@@ -49,4 +49,12 @@ export const ENDPOINTS = {
       //   `/api/clients/${clientId}/recipients/${recipientId}/confirm-upcoming-gift`,
     },
   },
+   deliveries: {
+    base: "/api/deliveries",
+
+    assign: "/api/deliveries/assign",
+
+    tracking: (deliveryId: string) =>
+      `/api/deliveries/${deliveryId}/tracking`,
+  },
 } as const;
