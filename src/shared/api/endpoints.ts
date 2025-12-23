@@ -91,4 +91,17 @@ export const ENDPOINTS = {
     stock: (productId: string) =>
       `/api/products/${productId}/stock`,
   },
+  subscriptions: {
+    plans: "/api/subscriptions/plans",
+
+    managePlan: "/api/subscriptions/plans/manage",
+
+    byId: (subscriptionId: string) =>
+      `/api/subscriptions/${subscriptionId}`,
+
+    all: "/api/subscriptions",
+
+    byUser: (userId: string) =>
+      `/api/subscriptions/user/${userId}`,
+  },
 } as const;
