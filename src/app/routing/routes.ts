@@ -33,6 +33,7 @@ export const RoutePath = {
     root: '/delivery',
     dashboard: '/delivery',
     assignments: '/delivery/assignments',
+    deliveries:'/delivery/deliveries'
   },
 } as const;
 
