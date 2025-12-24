@@ -31,6 +31,9 @@ import SettingsPage from '@/pages/SettingsPage/Settings';
 import { DeliveryDashboardLayout } from '@/pages/delivery/DashboardPage/ui/DeliveryDashboardLayout';
 import { DeliveryDashboardPage } from '@/pages/delivery/DashboardPage/ui/DeliveryDashboardPage';
 import DeliveriesPage from '@/pages/delivery/DeliveriesPage/Deliveries';
+import AssignmentsPage from '@/pages/delivery/AssignmentsPage/Assignments';
+import TrackingPage from '@/pages/delivery/TrackingPage/Tracking';
+import TrackingListPage from '@/pages/delivery/TrackingListPage/TrackingList';
 
 export const router = createBrowserRouter([
   // 🔓 Public
@@ -70,7 +73,9 @@ export const router = createBrowserRouter([
         children: [
           { index: true, path: RoutePath.delivery.dashboard, element: <DeliveryDashboardPage /> },
           { path: RoutePath.delivery.deliveries, element: <DeliveriesPage /> },
-
+          { path: RoutePath.delivery.assignments, element: <AssignmentsPage /> },
+          { path: RoutePath.delivery.tracking, element: <TrackingListPage /> },     // List view
+          { path: RoutePath.delivery.trackingDetail!, element: <TrackingPage /> },  // Detail view
           // { path: RoutePath.delivery.users, element: <UsersPage /> },
           // { path: RoutePath.delivery.products, element: <Products /> },
           // { path: RoutePath.delivery.packs, element: <Pack /> },

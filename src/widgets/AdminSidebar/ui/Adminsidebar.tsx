@@ -42,28 +42,31 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           h-[calc(100vh-2.5rem)]
         `}
       >
-        {/* Logo / toggle */}
-        <div className="p-4 border-b border-white/10">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggleCollapsed}
-            className="w-full h-12 rounded-xl"
-          >
+      {/* Logo / toggle */}
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+          {!collapsed && (
             <div className="bg-white rounded-full p-2 flex items-center justify-center">
               <img
                 src={logo}
                 alt="Karaa"
                 className={`transition-transform ${
-                  collapsed
-                    ? 'h-8 w-48 scale-x-150'
-                    : 'h-12 w-12 scale-100'
+                  collapsed ? 'h-8 w-48 scale-x-150' : 'h-12 w-12 scale-100'
                 }`}
               />
             </div>
-          </Button>
+          )}
+          <button
+            type="button"
+            onClick={onToggleCollapsed}
+            className="ml-auto rounded-lg p-2 hover:bg-white/10"
+          >
+            <div className='flex flex-col justify-around items-center h-4'>
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+            </div>
+          </button>
         </div>
-
         {/* Search (expanded only) */}
         {!collapsed && (
           <div className="px-4 py-3">

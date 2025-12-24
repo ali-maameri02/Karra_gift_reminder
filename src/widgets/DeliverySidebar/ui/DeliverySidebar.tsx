@@ -8,7 +8,8 @@ import {
   Settings, 
   MapPin, 
   PackageCheck, 
-  Search 
+  Search, 
+  Home
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import logo from '@/assets/logo.png';
@@ -74,6 +75,13 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
 
         {/* Navigation - Delivery specific */}
         <nav className="flex-1 space-y-2 px-2 py-4">
+
+        <NavItem
+            to="/delivery"
+            icon={<Home size={18} />}
+            label="Dashboard"
+            collapsed={collapsed}
+          />
           {/* My Deliveries - from /api/deliveries */}
           <NavItem
             to="/delivery/deliveries"
@@ -81,6 +89,7 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
             label="My Deliveries"
             collapsed={collapsed}
           />
+         
           
           {/* Assignments - from /api/deliveries/assign */}
           <NavItem

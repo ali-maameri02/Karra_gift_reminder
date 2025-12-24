@@ -33,7 +33,10 @@ export const RoutePath = {
     root: '/delivery',
     dashboard: '/delivery',
     assignments: '/delivery/assignments',
-    deliveries:'/delivery/deliveries'
+    deliveries:'/delivery/deliveries',
+    trackingDetail: '/delivery/tracking/:deliveryId',  
+
+    tracking:'/delivery/tracking'
   },
 } as const;
 
