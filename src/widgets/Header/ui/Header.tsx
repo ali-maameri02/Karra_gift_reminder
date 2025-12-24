@@ -148,7 +148,9 @@ export const Header: React.FC<HeaderProps> = ({ collapsed }) => {
                 <Moon className="h-5 w-5" />
               )}
             </Button>
-
+            <Link
+                to="/admin/notifications"
+              >
             <Button
               variant="ghost"
               size="icon"
@@ -159,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({ collapsed }) => {
               <Bell className="h-5 w-5" />
               <span className="absolute -right-1 -top-1 h-2 w-2 animate-pulse rounded-full bg-red-500" />
             </Button>
-
+</Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
