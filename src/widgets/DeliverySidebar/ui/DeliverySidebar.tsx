@@ -2,8 +2,16 @@
 'use client';
 
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Bell, Settings, SearchIcon } from 'lucide-react';
+import { 
+  ShoppingBag, 
+  Bell, 
+  Settings, 
+  MapPin, 
+  PackageCheck, 
+  Search 
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import logo from '@/assets/logo.png';
 
 interface DeliverySidebarProps {
   collapsed: boolean;
@@ -27,9 +35,14 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
         {/* Logo / toggle */}
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
           {!collapsed && (
-            <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="Karaa" className="h-8 w-auto" />
-              <span className="font-bold">Karaa</span>
+            <div className="bg-white rounded-full p-2 flex items-center justify-center">
+              <img
+                src={logo}
+                alt="Karaa"
+                className={`transition-transform ${
+                  collapsed ? 'h-8 w-48 scale-x-150' : 'h-12 w-12 scale-100'
+                }`}
+              />
             </div>
           )}
           <button
@@ -37,7 +50,11 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
             onClick={onToggleCollapsed}
             className="ml-auto rounded-lg p-2 hover:bg-white/10"
           >
-            <span className="block h-0.5 w-4 bg-white" />
+            <div className='flex flex-col justify-around items-center h-4'>
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+            </div>
           </button>
         </div>
 
@@ -45,43 +62,68 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
         {!collapsed && (
           <div className="p-4">
             <div className="relative">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/70" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search deliveries..."
                 className="w-full rounded-lg bg-yellow-500/20 px-4 py-2 pl-10 text-white placeholder-white/70 focus:outline-none"
               />
-              <SearchIcon className="absolute left-3 top-2.5 h-4 w-4 text-white/70" />
             </div>
           </div>
         )}
 
-        {/* Navigation */}
+        {/* Navigation - Delivery specific */}
         <nav className="flex-1 space-y-2 px-2 py-4">
+          {/* My Deliveries - from /api/deliveries */}
           <NavItem
-            to="/delivery/orders"
-            icon={<ShoppingBag />}
-            label="Orders"
+            to="/delivery/deliveries"
+            icon={<PackageCheck size={18} />}
+            label="My Deliveries"
+            collapsed={collapsed}
+          />
+          
+          {/* Assignments - from /api/deliveries/assign */}
+          <NavItem
+            to="/delivery/assignments"
+            icon={<ShoppingBag size={18} />}
+            label="Assignments"
+            collapsed={collapsed}
+          />
+          
+          {/* Tracking - from /api/deliveries/{deliveryId}/tracking */}
+          <NavItem
+            to="/delivery/tracking"
+            icon={<MapPin size={18} />}
+            label="Tracking"
             collapsed={collapsed}
           />
         </nav>
 
-        {/* Bottom */}
+        {/* Bottom - Required items */}
         <div className="space-y-2 border-t border-white/10 px-2 py-4">
           <NavItem
             to="/delivery/notifications"
-            icon={<Bell />}
+            icon={<Bell size={18} />}
             label="Notifications"
             collapsed={collapsed}
           >
             {!collapsed && (
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 bg-yellow-400 text-black">
                 3
               </Badge>
             )}
           </NavItem>
+          
+          <NavItem
+            to="/delivery/support"
+            icon={<PackageCheck size={18} />}
+            label="Support"
+            collapsed={collapsed}
+          />
+          
           <NavItem
             to="/delivery/settings"
-            icon={<Settings />}
+            icon={<Settings size={18} />}
             label="Settings"
             collapsed={collapsed}
           />
@@ -113,7 +155,7 @@ const NavItem = ({
     {icon}
     {!collapsed && (
       <>
-        <span>{label}</span>
+        <span className="text-sm font-medium">{label}</span>
         {children}
       </>
     )}
