@@ -32,4 +32,95 @@ export const ENDPOINTS = {
     sessions: (userId: string) =>
       `/api/users/${userId}/sessions`,
   },
+   clients: {
+    base: "/api/clients",
+
+    getById: (clientId: string) =>
+      `/api/clients/${clientId}`,
+
+    recipients: {
+      base: (clientId: string) =>
+        `/api/clients/${clientId}/recipients`,
+
+      // confirmUpcomingGift: (
+      //   clientId: string,
+      //   recipientId: string          // hadi ta3na wela khatina el 3omdaaaaan
+      // ) =>
+      //   `/api/clients/${clientId}/recipients/${recipientId}/confirm-upcoming-gift`,
+    },
+  },
+   deliveries: {
+    base: "/api/deliveries",
+
+    assign: "/api/deliveries/assign",
+
+    tracking: (deliveryId: string) =>
+      `/api/deliveries/${deliveryId}/tracking`,
+  },
+  notifications: {
+    base: "/api/notifications",
+  },
+  orders: {
+    base: "/api/orders",
+    place: "/api/orders/place",
+    status: "/api/orders/status",
+
+    byId: (orderId: string) =>
+      `/api/orders/${orderId}`,
+
+    track: (orderId: string) =>
+      `/api/orders/track/${orderId}`,
+  },
+   packs: {
+    base: "/api/packs",
+
+    byId: (packId: string) =>
+      `/api/packs/${packId}`,
+  },
+    payments: {
+    base: "/api/payments",
+    byId: (paymentId: string) =>
+      `/api/payments/${paymentId}`,
+  },
+   products: {
+    base: "/api/products",
+
+    byId: (productId: string) =>
+      `/api/products/${productId}`,
+
+    stock: (productId: string) =>
+      `/api/products/${productId}/stock`,
+  },
+  subscriptions: {
+    plans: "/api/subscriptions/plans",
+
+    managePlan: "/api/subscriptions/plans/manage",
+
+    byId: (subscriptionId: string) =>
+      `/api/subscriptions/${subscriptionId}`,
+
+    all: "/api/subscriptions",
+
+    byUser: (userId: string) =>
+      `/api/subscriptions/user/${userId}`,
+  },
+  vendors: {
+    base: "/api/vendors",
+
+    byId: (vendorId: string) =>
+      `/api/vendors/${vendorId}`,
+
+    orders: (vendorId: string) =>
+      `/api/vendors/${vendorId}/orders`,
+
+    updateOrderStatus: (
+      vendorId: string,
+      orderId: string
+    ) =>
+      `/api/vendors/${vendorId}/orders/${orderId}/status`,
+  },
+
+  admin: {
+    manageVendor: "/api/admin/vendors/manage",
+  },
 } as const;
