@@ -90,12 +90,12 @@ export const router = createBrowserRouter([
     ],
   },
   // 🎁 Vendor routes (example)
-  // {
-  //   element: <ProtectedRoute allowedRoles={['vendor']} />,
-  //   children: [
-  //     { path: routes.vendor.dashboard, element: <VendorDashboard /> },
-  //   ],
-  // },
+  {
+    element: <ProtectedRoute allowedRoles={['vendor']} />,
+    children: [
+      // { path: RoutePath.vendor.dashboard, element: <VendorDashboard /> },
+    ],
+  },
 
  
 
