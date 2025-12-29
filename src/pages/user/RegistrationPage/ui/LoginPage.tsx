@@ -23,9 +23,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { loginSchema, type LoginValues } from '../model/loginSchema';
+// import { loginSchema, type LoginValues } from '../model/loginSchema';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { RoutePath } from '@/app/routing/routes'; // ✅ Import routes
+import { loginSchema, type LoginValues } from '@/processes/auth';
 
 // 🔹 Role selector (same as in RegisterCard)
 const RoleSelector = ({ 
@@ -69,7 +70,12 @@ export const LoginCard = ({ onSwitch }: { onSwitch: () => void }) => {
   const onSubmit = async (data: LoginValues) => {
     try {
       // ✅ Use 'login' and 'selectedRole'
-      await login(data.email, data.password, selectedRole);
+      await login({
+  email: data.email,
+  password: data.password,
+  role: selectedRole,
+  });
+
       
       // ✅ Use 'routes' for redirect
       const redirectPath = 
