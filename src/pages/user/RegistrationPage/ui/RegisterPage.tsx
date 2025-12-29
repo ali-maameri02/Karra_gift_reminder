@@ -9,6 +9,18 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/app/providers/AuthProvider';
+import { registerSchema, RegisterValues } from '@/processes/auth';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
 /* ---------------- Role Selector ---------------- */
 const RoleSelector = ({
@@ -40,6 +52,36 @@ const RoleSelector = ({
 export const RegisterCard = ({ onSwitch }: { onSwitch: () => void }) => {
   const [selectedRole, setSelectedRole] =
     useState<  'vendor' | 'delivery'>('vendor');
+    const{register:registerUser,isLoading,error}=useAuth();
+
+    const form = useForm<RegisterValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (data: RegisterValues) => {
+     console.log('SUBMIT DATA', data, selectedRole);
+    
+    await registerUser({
+      email: data.email,
+      password: data.password,
+      role: selectedRole,
+      firstName: "string",
+      lastName: "string",
+      phoneNumber: "string",
+      address: {
+    street: "string",
+    city: "string",
+    state: "string",
+    postalCode: "string",
+    country: "string",
+  },
+      deviceInfo: "string",
+    });
+  };
 
   return (
     <Card className="w-full max-w-md bg-white/85 backdrop-blur-xl rounded-2xl border border-white/30 shadow-xl">
@@ -54,10 +96,49 @@ export const RegisterCard = ({ onSwitch }: { onSwitch: () => void }) => {
         {/* 🔘 Role Selector */}
         <RoleSelector selectedRole={selectedRole} onSelect={setSelectedRole} />
 
-        <Input placeholder="Email" />
-        <Input type="password" placeholder="Password" />
+         <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="you@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <Button className="w-full">Create account</Button>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {error && (
+              <div className="text-sm text-destructive">{error}</div>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full bg-[#3E236E] hover:bg-[#3E236E]/90 text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating account...' : 'Create account'}
+            </Button>
+          </form>
+        </Form>
 
         <div className="text-center text-sm">
           Already have an account?{' '}

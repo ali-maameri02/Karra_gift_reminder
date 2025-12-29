@@ -68,25 +68,20 @@ export const LoginCard = ({ onSwitch }: { onSwitch: () => void }) => {
   });
 
   const onSubmit = async (data: LoginValues) => {
-    try {
-      // ✅ Use 'login' and 'selectedRole'
-      await login({
-  email: data.email,
-  password: data.password,
-  role: selectedRole,
-  });
+    await login({
+      email: data.email,
+      password: data.password,
+      role: selectedRole,
+    });
 
-      
-      // ✅ Use 'routes' for redirect
-      const redirectPath = 
-        selectedRole === 'admin' ? RoutePath.admin.dashboard :
-        selectedRole === 'delivery' ? '/delivery' :
-        '/vendor';
-      
-      navigate(redirectPath, { replace: true });
-    } catch (err) {
-      setSubmitError('Invalid email or password');
-    }
+    const redirectPath =
+      selectedRole === 'admin'
+        ? RoutePath.admin.dashboard
+        : selectedRole === 'delivery'
+        ? '/delivery'
+        : '/vendor';
+
+    navigate(redirectPath, { replace: true });
   };
 
   return (

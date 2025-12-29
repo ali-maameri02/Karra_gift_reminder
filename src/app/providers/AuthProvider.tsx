@@ -4,11 +4,14 @@ import { createContext, useContext, ReactNode } from 'react';
 import { useLoginMutation } from '@/features/auth/login/model/mutation';
 import type { LoginRequest } from '@/features/auth/login/model/types';
 import { useAuthStore } from '../store/auth.store';
+import { RegisterRequest } from '@/features/auth/register/model/types';
+import { useRegisterMutation } from '@/features/auth/register/model/mutation';
 
 type AuthContextType = {
   isAuthenticated: boolean;
   userRole: 'admin' | 'vendor' | 'delivery' | null;
   login: (payload: LoginRequest) => Promise<void>;
+  register: (payload: RegisterRequest) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
@@ -23,12 +26,17 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { mutateAsync, isPending, error } = useLoginMutation();
+  const loginMutation = useLoginMutation();
+  const registerMutation = useRegisterMutation();
   const { isAuthenticated, role, setAuth, logout } = useAuthStore();
 
   const login = async (payload: LoginRequest) => {
-    const data = await mutateAsync(payload);
+    const data = await loginMutation.mutateAsync(payload);
     setAuth(data);
+  };
+  const register = async (payload: RegisterRequest) => {
+    await registerMutation.mutateAsync(payload);
+    // setAuth(data);
   };
 
   return (
@@ -37,9 +45,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         userRole: role,
         login,
+        register,
         logout,
-        isLoading: isPending,
-        error: error ? String(error) : null,
+        isLoading: loginMutation.isPending || registerMutation.isPending,
+        error: loginMutation.error ? String(loginMutation.error) : null,
       }}
     >
       {children}
