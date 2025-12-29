@@ -71,7 +71,6 @@ export const LoginCard = ({ onSwitch }: { onSwitch: () => void }) => {
     await login({
       email: data.email,
       password: data.password,
-      role: selectedRole,
     });
 
     const redirectPath =

@@ -3,11 +3,14 @@ export type Role = "admin" | "vendor" | "delivery";
 export interface LoginRequest {
   email?: string;
   password?: string;
-  role: Role;
+  // role: Role;
 }
 
 export type LoginResponse = {
-  token: string;
-  role: Role;
-  user?: any; // optional for now
+  userId: string;
+  email: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+  // role: "admin" | "vendor" | "delivery";
 };

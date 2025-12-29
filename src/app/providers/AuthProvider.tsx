@@ -6,6 +6,7 @@ import type { LoginRequest } from '@/features/auth/login/model/types';
 import { useAuthStore } from '../store/auth.store';
 import { RegisterRequest } from '@/features/auth/register/model/types';
 import { useRegisterMutation } from '@/features/auth/register/model/mutation';
+// import { getRoleFromToken } from '@/shared/lib/jwt';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -31,9 +32,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, role, setAuth, logout } = useAuthStore();
 
   const login = async (payload: LoginRequest) => {
-    const data = await loginMutation.mutateAsync(payload);
-    setAuth(data);
-  };
+  const data = await loginMutation.mutateAsync(payload);
+
+  // const role = getRoleFromToken(data.accessToken);
+
+  setAuth({
+    token: data.accessToken,
+    role: "admin",
+    user: {
+      id: data.userId,
+      email: data.email,
+    },
+  });
+};
   const register = async (payload: RegisterRequest) => {
     await registerMutation.mutateAsync(payload);
     // setAuth(data);
