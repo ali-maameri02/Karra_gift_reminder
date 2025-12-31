@@ -1,8 +1,18 @@
-// DeliverySidebar.tsx
+// VendorSidebar.tsx
 'use client';
 
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Bell, Settings, SearchIcon } from 'lucide-react';
+import { 
+  Home, 
+  Package, 
+  ShoppingBag, 
+  Gift, 
+  DollarSign, 
+  TrendingUp, 
+  Bell, 
+  Settings, 
+  Search 
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface VendorSidebarProps {
@@ -29,7 +39,7 @@ export const VendorSidebar: React.FC<VendorSidebarProps> = ({
           {!collapsed && (
             <div className="flex items-center gap-2">
               <img src="/logo.png" alt="Karaa" className="h-8 w-auto" />
-              <span className="font-bold">Karaa</span>
+              <span className="font-bold">Karaa Vendor</span>
             </div>
           )}
           <button
@@ -37,54 +47,45 @@ export const VendorSidebar: React.FC<VendorSidebarProps> = ({
             onClick={onToggleCollapsed}
             className="ml-auto rounded-lg p-2 hover:bg-white/10"
           >
-            <span className="block h-0.5 w-4 bg-white" />
+            <div className='flex flex-col justify-around items-center h-4'>
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+              <span className="block h-0.5 w-4 bg-white" />
+            </div>
           </button>
         </div>
 
-        {/* Search (only when expanded) */}
+        {/* Search */}
         {!collapsed && (
           <div className="p-4">
             <div className="relative">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/70" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search products, orders..."
                 className="w-full rounded-lg bg-yellow-500/20 px-4 py-2 pl-10 text-white placeholder-white/70 focus:outline-none"
               />
-              <SearchIcon className="absolute left-3 top-2.5 h-4 w-4 text-white/70" />
             </div>
           </div>
         )}
 
         {/* Navigation */}
         <nav className="flex-1 space-y-2 px-2 py-4">
-          <NavItem
-            to="/delivery/orders"
-            icon={<ShoppingBag />}
-            label="Orders"
-            collapsed={collapsed}
-          />
+          <NavItem to="/vendor" icon={<Home size={18} />} label="Dashboard" collapsed={collapsed} />
+          <NavItem to="/vendor/products" icon={<Package size={18} />} label="Products" collapsed={collapsed} />
+          <NavItem to="/vendor/packs" icon={<Gift size={18} />} label="Packs" collapsed={collapsed} />
+          <NavItem to="/vendor/orders" icon={<ShoppingBag size={18} />} label="Orders" collapsed={collapsed}>
+            {!collapsed && <Badge className="ml-2 bg-orange-400 text-black">12</Badge>}
+          </NavItem>
+          <NavItem to="/vendor/analytics" icon={<TrendingUp size={18} />} label="Analytics" collapsed={collapsed} />
         </nav>
 
         {/* Bottom */}
         <div className="space-y-2 border-t border-white/10 px-2 py-4">
-          <NavItem
-            to="/delivery/notifications"
-            icon={<Bell />}
-            label="Notifications"
-            collapsed={collapsed}
-          >
-            {!collapsed && (
-              <Badge variant="secondary" className="ml-2">
-                3
-              </Badge>
-            )}
+          <NavItem to="/vendor/notifications" icon={<Bell size={18} />} label="Notifications" collapsed={collapsed}>
+            {!collapsed && <Badge variant="secondary" className="ml-2 bg-yellow-400 text-black">3</Badge>}
           </NavItem>
-          <NavItem
-            to="/delivery/settings"
-            icon={<Settings />}
-            label="Settings"
-            collapsed={collapsed}
-          />
+          <NavItem to="/vendor/settings" icon={<Settings size={18} />} label="Settings" collapsed={collapsed} />
         </div>
       </div>
     </div>
@@ -113,7 +114,7 @@ const NavItem = ({
     {icon}
     {!collapsed && (
       <>
-        <span>{label}</span>
+        <span className="text-sm font-medium">{label}</span>
         {children}
       </>
     )}

@@ -34,6 +34,11 @@ import DeliveriesPage from '@/pages/delivery/DeliveriesPage/Deliveries';
 import AssignmentsPage from '@/pages/delivery/AssignmentsPage/Assignments';
 import TrackingPage from '@/pages/delivery/TrackingPage/Tracking';
 import TrackingListPage from '@/pages/delivery/TrackingListPage/TrackingList';
+import { DashboardVendorLayout } from '@/pages/vendor/DashboardPage/DashboardVendorLayout';
+import { DashboardVendorpage } from '@/pages/vendor/DashboardPage/ui/DashboardVendorpage';
+import { VendorOrders } from '@/pages/vendor/OrdersPage/orders';
+import { VendorProduct } from '@/pages/vendor/ProductPage/Products';
+import { VendorPacks } from '@/pages/vendor/PacksPage/Packs';
 
 export const router = createBrowserRouter([
   // 🔓 Public
@@ -76,15 +81,7 @@ export const router = createBrowserRouter([
           { path: RoutePath.delivery.assignments, element: <AssignmentsPage /> },
           { path: RoutePath.delivery.tracking, element: <TrackingListPage /> },     // List view
           { path: RoutePath.delivery.trackingDetail!, element: <TrackingPage /> },  // Detail view
-          // { path: RoutePath.delivery.users, element: <UsersPage /> },
-          // { path: RoutePath.delivery.products, element: <Products /> },
-          // { path: RoutePath.delivery.packs, element: <Pack /> },
-          // { path: RoutePath.delivery.orders, element: <Orders /> },
-          // { path: RoutePath.delivery.subscriptions, element: <SubscriptionsPage /> },
-          // { path: RoutePath.delivery.notifications, element: <NotificationsPage/> },
-          // { path: RoutePath.delivery.settings, element: <SettingsPage/> },
-          // { path: routes.admin.plans, element: <PlansPage /> },
-          // { path: routes.admin.reports, element: <ReportsPage /> },
+
         ],
       },
     ],
@@ -93,7 +90,17 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute allowedRoles={['vendor']} />,
     children: [
-      // { path: RoutePath.vendor.dashboard, element: <VendorDashboard /> },
+      {
+        element: <DashboardVendorLayout />,
+        children: [
+          { index: true, path: RoutePath.vendor.dashboard, element: <DashboardVendorpage /> },
+          { path: RoutePath.vendor.orders, element: <VendorOrders /> },
+          { path: RoutePath.vendor.products, element: <VendorProduct /> },
+          { path: RoutePath.vendor.packs, element: <VendorPacks /> },
+          
+          
+        ],
+      },
     ],
   },
 

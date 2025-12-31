@@ -26,6 +26,8 @@ export const RoutePath = {
     dashboard: '/vendor',
     products: '/vendor/products',
     orders: '/vendor/orders',
+    packs: '/vendor/packs',
+
   },
 
   // Delivery
