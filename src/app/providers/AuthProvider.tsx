@@ -1,91 +1,65 @@
-// src/app/providers/AuthProvider.tsx
 'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLoginMutation } from '@/features/auth/login/model/mutation';
+import type { LoginRequest } from '@/features/auth/login/model/types';
+import { useAuthStore } from '../store/auth.store';
+import { RegisterRequest } from '@/features/auth/register/model/types';
+import { useRegisterMutation } from '@/features/auth/register/model/mutation';
+// import { getRoleFromToken } from '@/shared/lib/jwt';
 
-// 🔹 Add userRole to the type
 type AuthContextType = {
   isAuthenticated: boolean;
-  userRole: 'admin' | 'vendor' | 'delivery' | null; // 👈 add this
-  login: (email: string, password: string, role: 'admin' | 'vendor' | 'delivery') => Promise<void>;
+  userRole: 'admin' | 'vendor' | 'delivery' | null;
+  login: (payload: LoginRequest) => Promise<void>;
+  register: (payload: RegisterRequest) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
 };
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 👇 This is the key: export the hook!
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<'admin' | 'vendor' | 'delivery' | null>(null); // 👈 add state
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const loginMutation = useLoginMutation();
+  const registerMutation = useRegisterMutation();
+  const { isAuthenticated, role, setAuth, logout } = useAuthStore();
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const role = localStorage.getItem('userRole') as 'admin' | 'vendor' | 'delivery' | null;
-    
-    setIsAuthenticated(!!token);
-    setUserRole(role);
-    setIsLoading(false);
-  }, []);
+  const login = async (payload: LoginRequest) => {
+  const data = await loginMutation.mutateAsync(payload);
 
-  // 🔹 Update login to accept role
-  const login = async (
-    email: string, 
-    password: string, 
-    role: 'admin' | 'vendor' | 'delivery'  // 👈 add role param
-  ) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // 🔐 Simulate login
-      if (email && password) {
-        localStorage.setItem('authToken', 'fake-jwt');
-        localStorage.setItem('userRole', role); // 👈 save role
-        setIsAuthenticated(true);
-        setUserRole(role); // 👈 update state
-      } else {
-        throw new Error('Invalid credentials');
-      }
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const role = getRoleFromToken(data.accessToken);
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userRole');
-    setIsAuthenticated(false);
-    setUserRole(null);
+  setAuth({
+    token: data.accessToken,
+    role: "admin",
+    user: {
+      id: data.userId,
+      email: data.email,
+    },
+  });
+};
+  const register = async (payload: RegisterRequest) => {
+    await registerMutation.mutateAsync(payload);
+    // setAuth(data);
   };
 
   return (
     <AuthContext.Provider
-      value={{ 
-        isAuthenticated, 
-        userRole,    // 👈 expose it
-        login, 
-        logout, 
-        isLoading, 
-        error 
+      value={{
+        isAuthenticated,
+        userRole: role,
+        login,
+        register,
+        logout,
+        isLoading: loginMutation.isPending || registerMutation.isPending,
+        error: loginMutation.error ? String(loginMutation.error) : null,
       }}
     >
       {children}

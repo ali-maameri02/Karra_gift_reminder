@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://146.190.115.80:5000"
 
 export const http: AxiosInstance = axios.create({
   baseURL: API_URL,

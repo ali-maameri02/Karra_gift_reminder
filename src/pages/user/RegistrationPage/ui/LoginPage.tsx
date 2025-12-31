@@ -23,9 +23,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { loginSchema, type LoginValues } from '../model/loginSchema';
+// import { loginSchema, type LoginValues } from '../model/loginSchema';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { RoutePath } from '@/app/routing/routes'; // ✅ Import routes
+import { loginSchema, type LoginValues } from '@/processes/auth';
 
 // 🔹 Role selector (same as in RegisterCard)
 const RoleSelector = ({ 
@@ -67,20 +68,19 @@ export const LoginCard = ({ onSwitch }: { onSwitch: () => void }) => {
   });
 
   const onSubmit = async (data: LoginValues) => {
-    try {
-      // ✅ Use 'login' and 'selectedRole'
-      await login(data.email, data.password, selectedRole);
-      
-      // ✅ Use 'routes' for redirect
-      const redirectPath = 
-        selectedRole === 'admin' ? RoutePath.admin.dashboard :
-        selectedRole === 'delivery' ? '/delivery' :
-        '/vendor';
-      
-      navigate(redirectPath, { replace: true });
-    } catch (err) {
-      setSubmitError('Invalid email or password');
-    }
+    await login({
+      email: data.email,
+      password: data.password,
+    });
+
+    const redirectPath =
+      selectedRole === 'admin'
+        ? RoutePath.admin.dashboard
+        : selectedRole === 'delivery'
+        ? '/delivery'
+        : '/vendor';
+
+    navigate(redirectPath, { replace: true });
   };
 
   return (
